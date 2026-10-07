@@ -1,4 +1,6 @@
-# Smart Hostel Management System - Oracle database (runs independently of the backend)
+# Smart Hostel Management System - infrastructure (runs independently of the backend)
+#   oracle : Oracle 23ai Free  - the primary database (all application data)
+#   redis  : Redis 7           - cache + short-lived login rate-limit counters only
 # Start:  docker compose up -d        (from this folder)
 # Status: docker compose ps           (wait for "healthy")
 services:
@@ -12,6 +14,7 @@ services:
       ORACLE_PASSWORD: ${ORACLE_ADMIN_PASSWORD}   # SYS/SYSTEM admin password (from .env)
       APP_USER: ${DB_USERNAME}                    # application schema user -> user1
       APP_USER_PASSWORD: ${DB_PASSWORD}           # -> user1Password
+      TZ: Asia/Kolkata                            # SYSDATE/SYSTIMESTAMP in IST, same as the backend
     volumes:
       - shms-oracle-data:/opt/oracle/oradata       # data survives container restarts/removal
       - ./:/opt/shms-sql:ro                        # SQL scripts, used by run-all.sh
@@ -21,6 +24,23 @@ services:
       timeout: 10s
       retries: 20
       start_period: 60s
+
+  redis:
+    image: redis:7.4-alpine
+    container_name: shms-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    # Redis only holds cache entries and rate-limit counters that can be rebuilt,
+    # so persistence to disk is switched off. Memory is capped; when full, the
+    # least-recently-used keys are evicted.
+    command: ["redis-server", "--save", "", "--appendonly", "no",
+              "--maxmemory", "128mb", "--maxmemory-policy", "allkeys-lru"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
 
 volumes:
   shms-oracle-data:

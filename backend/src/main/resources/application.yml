@@ -1,0 +1,64 @@
+# Smart Hostel Management System - backend configuration
+# Every value of the form ${NAME:default} can be overridden with an environment variable
+# (e.g. in IntelliJ: Run Configuration -> Environment variables). No credentials are in Java code.
+
+server:
+  port: 8080
+
+spring:
+  application:
+    name: smart-hostel-backend
+
+  # ---------- Oracle (primary database) ----------
+  datasource:
+    url: ${DB_URL:jdbc:oracle:thin:@localhost:1521/FREEPDB1}
+    username: ${DB_USERNAME:user1}
+    password: ${DB_PASSWORD:user1Password}
+    hikari:
+      maximum-pool-size: 10
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      # The tables are created by the SQL scripts in /database.
+      # Hibernate only checks that the entities match them; it never changes the schema.
+      ddl-auto: validate
+    properties:
+      hibernate:
+        jdbc.time_zone: Asia/Kolkata
+
+  # ---------- Redis (cache + login rate limiting) ----------
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      timeout: 2s
+
+  cache:
+    type: redis
+
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
+
+# ---------- Application settings ----------
+app:
+  jwt:
+    # HS256 secret (at least 32 characters). Override JWT_SECRET outside development.
+    secret: ${JWT_SECRET:dev-only-secret-change-me-smart-hostel-2026-xyz}
+    expiration-minutes: ${JWT_EXPIRATION_MINUTES:480}
+  cors:
+    allowed-origin: ${FRONTEND_URL:http://localhost:5173}
+  upload-dir: ${UPLOAD_DIR:uploads}
+  rate-limit:
+    login-max-failures: 5
+    login-window-seconds: 300
+
+management:
+  endpoints.web.exposure.include: health
+  endpoint.health.show-details: always
+
+logging:
+  level:
+    com.smarthostel: INFO

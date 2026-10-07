@@ -82,3 +82,34 @@ It is the only source used for the "Problems Encountered and Solutions" sections
 - **Fix:** The role check now uses a different waiting student (result: `ORA-20014 Only an Admin or Warden can
   allocate rooms`). The FK check now deletes a room that has allocations (result: `ORA-02292 ... FK_ALLOC_ROOM`).
 - **Files affected:** `database/transactions/10_demo_transactions.sql`
+
+## 6. Resolving a complaint failed with a CHECK constraint (time-zone mismatch)
+
+- **Date:** 2026-10-07
+- **Phase:** 10 / 14 (API workflow testing)
+- **Problem:** In `tools/api_workflow_test.py`, the maintenance user could start work on a complaint, but
+  marking it **Resolved** returned HTTP 409.
+- **Error message (backend log):**
+  ```
+  SQL Error: 2290, SQLState: 23000
+  ORA-02290: check constraint (USER1.CK_COMPLAINT_RESOLVED) violated
+  ```
+- **Cause:** The Oracle container ran in **UTC**, while the Spring Boot app runs in **IST (UTC+05:30)**.
+  The app stored `created_date = 23:49` (IST). When the status became Resolved, the trigger
+  `trg_complaint_status` set `resolved_date := SYSTIMESTAMP`, which the database evaluated as `18:19` (UTC).
+  So `resolved_date < created_date`, and the CHECK constraint `resolved_date >= created_date` correctly
+  rejected the update. Checked with `SELECT SYSTIMESTAMP FROM dual` (showed `+00:00`) vs. the host clock (IST).
+- **Fix:** Set `TZ: Asia/Kolkata` for the Oracle service in `database/docker-compose.yml` and recreated the
+  container (data kept in the volume). `SYSTIMESTAMP` now returns `+05:30`, identical to the backend clock.
+  This also prevents `SYSDATE`-based dates (allocation / vacate dates) from being a day behind between
+  00:00 and 05:30 IST.
+- **Files affected:** `database/docker-compose.yml`
+
+## 7. Small bug in the Redis test script output
+
+- **Date:** 2026-10-07
+- **Problem:** The first line of `tools/redis-demo-test.sh` printed `0` and then a stray `n/a` line.
+- **Cause:** `grep -c` prints `0` **and** exits with status 1 when nothing matches, so the `|| echo "n/a"`
+  fallback ran as well.
+- **Fix:** Replaced `cmd || echo n/a` with an explicit `if [ -n "$LOG" ]; then ...; else ...; fi`.
+- **Files affected:** `tools/redis-demo-test.sh`

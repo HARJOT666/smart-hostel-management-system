@@ -1,0 +1,22 @@
+Smart Hostel - Redis test run at 2026-10-07 23:48:25
+
+================ PART 1: CACHE (announcements of hostel 1) ================
+Start: key shms:announcements::1 exists? 0   Oracle reads so far: 0
+n/a
+1) GET #1 -> 3 announcements | key exists? 1 TTL=600s | Oracle reads: 1  (cache MISS -> read from Oracle, stored in Redis)
+2) GET #2 -> 3 announcements | Oracle reads: 1  (unchanged -> served from Redis cache)
+3) POST new announcement id=25 | key exists now? 0  (@CacheEvict removed the stale list)
+4) GET #3 -> 4 announcements, new notice present: True | Oracle reads: 2  (fresh data from Oracle, cached again)
+5) DELETE test announcement 25 | key exists? 0  (evicted again)
+
+================ PART 2: LOGIN RATE LIMIT (5 failures / 5 minutes / IP) ================
+Failed attempt 1 -> HTTP 401 | Redis rate:login:fail:0:0:0:0:0:0:0:1 = 1 (TTL 300s)
+Failed attempt 2 -> HTTP 401 | Redis rate:login:fail:0:0:0:0:0:0:0:1 = 2 (TTL 300s)
+Failed attempt 3 -> HTTP 401 | Redis rate:login:fail:0:0:0:0:0:0:0:1 = 3 (TTL 299s)
+Failed attempt 4 -> HTTP 401 | Redis rate:login:fail:0:0:0:0:0:0:0:1 = 4 (TTL 299s)
+Failed attempt 5 -> HTTP 401 | Redis rate:login:fail:0:0:0:0:0:0:0:1 = 5 (TTL 299s)
+6th attempt (CORRECT password) -> HTTP 429 | Retry-After: 299
+   body: {"status":429,"error":"Too Many Requests","message":"Too many failed login attempts. Try again in 299 seconds.","timestamp":"2026-10-07T23:48:27.344701799"}
+Waiting 301 seconds for the Redis key to expire...
+Key exists after expiry? 0
+Login after expiry (correct password) -> HTTP 200
