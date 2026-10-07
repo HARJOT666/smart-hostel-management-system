@@ -1,0 +1,22 @@
+-- Row counts and PL/SQL object status (printed at the end of run-all.sh)
+SET PAGESIZE 100
+COLUMN table_name FORMAT A22
+SELECT 'HOSTEL' table_name, COUNT(*) row_count FROM hostel UNION ALL
+SELECT 'ROOM', COUNT(*) FROM room UNION ALL
+SELECT 'STAFF', COUNT(*) FROM staff UNION ALL
+SELECT 'STUDENT', COUNT(*) FROM student UNION ALL
+SELECT 'ROOM_ALLOCATION', COUNT(*) FROM room_allocation UNION ALL
+SELECT 'COMPLAINT', COUNT(*) FROM complaint UNION ALL
+SELECT 'LEAVE_REQUEST', COUNT(*) FROM leave_request UNION ALL
+SELECT 'VISITOR_PASS', COUNT(*) FROM visitor_pass UNION ALL
+SELECT 'FEE_PAYMENT', COUNT(*) FROM fee_payment UNION ALL
+SELECT 'ANNOUNCEMENT', COUNT(*) FROM announcement UNION ALL
+SELECT 'MARKETPLACE_LISTING', COUNT(*) FROM marketplace_listing UNION ALL
+SELECT 'INVENTORY_ITEM', COUNT(*) FROM inventory_item UNION ALL
+SELECT 'LOST_FOUND_ITEM', COUNT(*) FROM lost_found_item UNION ALL
+SELECT 'MESS_MENU', COUNT(*) FROM mess_menu;
+
+COLUMN object_name FORMAT A32
+SELECT object_type, COUNT(*) objects, SUM(CASE WHEN status = 'VALID' THEN 1 ELSE 0 END) valid
+  FROM user_objects WHERE object_type IN ('PROCEDURE', 'FUNCTION', 'TRIGGER')
+ GROUP BY object_type ORDER BY object_type;

@@ -1,0 +1,10 @@
+database/.env
+backend/target/
+backend/uploads/
+frontend/node_modules/
+frontend/dist/
+.idea/
+*.iml
+.DS_Store
+__pycache__/
+.venv/

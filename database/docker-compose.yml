@@ -1,0 +1,27 @@
+# Smart Hostel Management System - Oracle database (runs independently of the backend)
+# Start:  docker compose up -d        (from this folder)
+# Status: docker compose ps           (wait for "healthy")
+services:
+  oracle:
+    image: gvenzl/oracle-free:23-slim
+    container_name: shms-oracle
+    restart: unless-stopped          # comes back automatically when Docker Desktop starts
+    ports:
+      - "1521:1521"
+    environment:
+      ORACLE_PASSWORD: ${ORACLE_ADMIN_PASSWORD}   # SYS/SYSTEM admin password (from .env)
+      APP_USER: ${DB_USERNAME}                    # application schema user -> user1
+      APP_USER_PASSWORD: ${DB_PASSWORD}           # -> user1Password
+    volumes:
+      - shms-oracle-data:/opt/oracle/oradata       # data survives container restarts/removal
+      - ./:/opt/shms-sql:ro                        # SQL scripts, used by run-all.sh
+    healthcheck:
+      test: ["CMD", "healthcheck.sh"]
+      interval: 15s
+      timeout: 10s
+      retries: 20
+      start_period: 60s
+
+volumes:
+  shms-oracle-data:
+    name: shms-oracle-data
