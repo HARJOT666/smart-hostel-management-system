@@ -76,7 +76,7 @@ public class DashboardService {
         leaveRepository.findByStudent(studentId).forEach(l -> updates.add(new ActivityItem("Leave", l.getId(),
                 "Leave " + l.getStartDate() + " to " + l.getEndDate(), l.getStatus(), l.getAppliedDate().atStartOfDay())));
         visitorRepository.findByStudent(studentId).forEach(v -> updates.add(new ActivityItem("Visitor", v.getId(),
-                "Visit by " + v.getVisitorName() + " on " + v.getVisitDate(), v.getStatus(), v.getVisitDate().atStartOfDay())));
+                "Visit by " + v.getVisitorName(), v.getStatus(), v.getVisitDate().atStartOfDay())));
         updates.sort(Comparator.comparing(ActivityItem::date).reversed());
 
         long openComplaints = complaintRepository.countByStudentIdAndStatusNot(studentId, "Resolved");

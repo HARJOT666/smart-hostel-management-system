@@ -1,6 +1,6 @@
 database/.env
 backend/target/
-backend/uploads/
+uploads/
 frontend/node_modules/
 frontend/dist/
 .idea/

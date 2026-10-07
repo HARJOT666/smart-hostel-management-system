@@ -113,3 +113,49 @@ It is the only source used for the "Problems Encountered and Solutions" sections
   fallback ran as well.
 - **Fix:** Replaced `cmd || echo n/a` with an explicit `if [ -n "$LOG" ]; then ...; else ...; fi`.
 - **Files affected:** `tools/redis-demo-test.sh`
+
+## 8. Chart colour failed the colour-validation check
+
+- **Date:** 2026-10-08
+- **Phase:** 9 (frontend)
+- **Problem:** The UI accent colour `#9a5a3c` was going to be used for dashboard bar charts. The palette validator
+  reported `[FAIL] Chroma floor — below floor (reads gray): #9a5a3c 0.095`.
+- **Fix:** Added a separate `--chart` colour `#a8532c`, which passed lightness, chroma and 3:1 contrast against the
+  card surface `#fbf8f3`. Buttons keep the softer accent.
+- **Files affected:** `frontend/src/index.css`, `frontend/src/components/HBarChart.jsx`
+
+## 9. Stale search results in the React tables (race condition)
+
+- **Date:** 2026-10-08
+- **Phase:** 10 / 14 (browser testing)
+- **Problem:** In the automated UI test, a visitor pass that existed in Oracle (`pass_id 271`, Pending) did not appear
+  on the warden's Visitors page after searching for the visitor's name.
+- **What was checked:** The row was in the database; the same page worked when used slowly; the browser sent
+  two requests: `/api/visitors?status=Pending` and then `/api/visitors?status=Pending&q=Rakesh+Mehta`.
+- **Cause:** The `useApi` hook stored the response of every request. When the first (unfiltered) request answered
+  *after* the second (filtered) one, it overwrote the table with old data. Typing quickly in any search box could
+  cause the same problem.
+- **Fix:** `useApi` now marks each request as outdated when the URL changes (effect clean-up) and ignores answers
+  from outdated requests. `reload()` re-runs the effect through a version counter.
+- **Files affected:** `frontend/src/hooks/useApi.js`
+
+## 10. Problems in the automated UI test itself
+
+- **Date:** 2026-10-08
+- **Problems and fixes:**
+  - The test looked for the newly registered student before the waiting-list table had loaded, so it paged past
+    the student and failed on a disabled "Next" button → it now waits for the first table row.
+  - The test leave reason ("Going home for Diwali") and visitor purpose also exist in the seed data, so the selector
+    matched three rows (`strict mode violation`) → changed to texts that do not appear in the seed data.
+- **Files affected:** `tools/ui_transactions_test.py`
+
+## 11. Misleading Spring Data Redis start-up messages
+
+- **Date:** 2026-10-08
+- **Problem:** At start-up Spring printed messages such as
+  `Spring Data Redis - Could not safely identify store assignment for repository candidate interface ...VisitorPassRepository`
+  for every JPA repository.
+- **Cause:** With both JPA and Redis on the classpath, Spring checks whether each repository might belong to Redis.
+  This project uses Redis only through Spring Cache and `StringRedisTemplate`, never as a repository store.
+- **Fix:** `spring.data.redis.repositories.enabled: false` in `application.yml`. Start-up log now has no warnings.
+- **Files affected:** `backend/src/main/resources/application.yml`

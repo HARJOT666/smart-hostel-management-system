@@ -33,6 +33,9 @@ spring:
       host: ${REDIS_HOST:localhost}
       port: ${REDIS_PORT:6379}
       timeout: 2s
+      # Redis is used only through Spring Cache and StringRedisTemplate, not as a repository store
+      repositories:
+        enabled: false
 
   cache:
     type: redis
