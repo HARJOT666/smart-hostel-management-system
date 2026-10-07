@@ -159,3 +159,15 @@ It is the only source used for the "Problems Encountered and Solutions" sections
   This project uses Redis only through Spring Cache and `StringRedisTemplate`, never as a repository store.
 - **Fix:** `spring.data.redis.repositories.enabled: false` in `application.yml`. Start-up log now has no warnings.
 - **Files affected:** `backend/src/main/resources/application.yml`
+
+## 12. Uploaded test images were committed to git (caught before pushing)
+
+- **Date:** 2026-10-08
+- **Problem:** Before the first push, `git ls-files` showed 8 files under `uploads/complaints/` and `uploads/completed/`
+  (photos uploaded by the automated UI test).
+- **Cause:** `app.upload-dir` is the relative path `uploads`, resolved from the backend's working directory. The jar had
+  been started from the repository root, so images were saved to `./uploads/`, while `.gitignore` only covered
+  `backend/uploads/` (the location when run from IntelliJ).
+- **Fix:** `.gitignore` now ignores `uploads/` at any level; the files were removed from the index
+  (`git rm -r --cached uploads`) and the unpushed commit was amended. Nothing was pushed.
+- **Files affected:** `.gitignore`

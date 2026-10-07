@@ -1,0 +1,1638 @@
+{
+ "captured": "08 Oct 2026, 00:23",
+ "queries": [
+  {
+   "label": "Q1",
+   "title": "Students currently living in Aravali Block (4-table join, sorted by room)",
+   "sql": "SELECT s.registration_no, s.name, r.room_number, a.bed_number, a.allocation_date\n  FROM student s\n  JOIN room_allocation a ON a.student_id = s.student_id AND a.status = 'Active'\n  JOIN room r            ON r.room_id = a.room_id\n  JOIN hostel h          ON h.hostel_id = r.hostel_id\n WHERE h.hostel_name = 'Aravali Block'\n ORDER BY r.room_number, a.bed_number\n FETCH FIRST 12 ROWS ONLY;",
+   "results": [
+    {
+     "columns": [
+      "REGISTRATION_NO",
+      "NAME",
+      "ROOM_NUMBER",
+      "BED_NUMBER",
+      "ALLOCATION_DATE"
+     ],
+     "rows": [
+      [
+       "24BYB1001",
+       "Aarav Mehta",
+       "AR-101",
+       1,
+       "16-07-2026"
+      ],
+      [
+       "25BYB1006",
+       "Siddharth Bose",
+       "AR-101",
+       2,
+       "24-07-2026"
+      ],
+      [
+       "25BEC1022",
+       "Akash Reddy",
+       "AR-102",
+       1,
+       "30-07-2026"
+      ],
+      [
+       "26BAI1031",
+       "Mihir Menon",
+       "AR-102",
+       2,
+       "19-07-2026"
+      ],
+      [
+       "26BEC1007",
+       "Dev Yadav",
+       "AR-102",
+       3,
+       "15-07-2026"
+      ],
+      [
+       "25BCE1015",
+       "Ayaan Sethi",
+       "AR-103",
+       1,
+       "18-07-2026"
+      ],
+      [
+       "24BYB1018",
+       "Aarav Mishra",
+       "AR-103",
+       2,
+       "19-07-2026"
+      ],
+      [
+       "25BIT1067",
+       "Deepak Gupta",
+       "AR-103",
+       3,
+       "17-07-2026"
+      ],
+      [
+       "25BYB1014",
+       "Rohan Pandey",
+       "AR-104",
+       1,
+       "16-07-2026"
+      ],
+      [
+       "26BIT1051",
+       "Kabir Nair",
+       "AR-104",
+       2,
+       "21-07-2026"
+      ],
+      [
+       "25BIT1065",
+       "Aditya Verma",
+       "AR-104",
+       3,
+       "30-07-2026"
+      ],
+      [
+       "25BAI1058",
+       "Atharv Shah",
+       "AR-104",
+       4,
+       "31-07-2026"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "label": "Q2",
+   "title": "Rooms with free beds in each hostel (filter + function call)",
+   "sql": "SELECT h.hostel_name, r.room_number, r.room_type, r.capacity, r.occupied_count,\n       fn_available_beds(r.room_id) AS free_beds\n  FROM room r JOIN hostel h ON h.hostel_id = r.hostel_id\n WHERE r.occupied_count < r.capacity\n ORDER BY free_beds DESC, h.hostel_name, r.room_number\n FETCH FIRST 12 ROWS ONLY;",
+   "results": [
+    {
+     "columns": [
+      "HOSTEL_NAME",
+      "ROOM_NUMBER",
+      "ROOM_TYPE",
+      "CAPACITY",
+      "OCCUPIED_COUNT",
+      "FREE_BEDS"
+     ],
+     "rows": [
+      [
+       "Ganga Block",
+       "GA-106",
+       "Quad",
+       4,
+       0,
+       4
+      ],
+      [
+       "Ganga Block",
+       "GA-301",
+       "Quad",
+       4,
+       0,
+       4
+      ],
+      [
+       "Kaveri Block",
+       "KA-104",
+       "Quad",
+       4,
+       0,
+       4
+      ],
+      [
+       "Aravali Block",
+       "AR-501",
+       "Quad",
+       4,
+       1,
+       3
+      ],
+      [
+       "Aravali Block",
+       "AR-504",
+       "Quad",
+       4,
+       1,
+       3
+      ],
+      [
+       "Aravali Block",
+       "AR-505",
+       "Triple",
+       3,
+       0,
+       3
+      ],
+      [
+       "Ganga Block",
+       "GA-405",
+       "Triple",
+       3,
+       0,
+       3
+      ],
+      [
+       "Ganga Block",
+       "GA-406",
+       "Quad",
+       4,
+       1,
+       3
+      ],
+      [
+       "Kaveri Block",
+       "KA-503",
+       "Quad",
+       4,
+       1,
+       3
+      ],
+      [
+       "Nilgiri Block",
+       "NI-105",
+       "Quad",
+       4,
+       1,
+       3
+      ],
+      [
+       "Nilgiri Block",
+       "NI-201",
+       "Triple",
+       3,
+       0,
+       3
+      ],
+      [
+       "Shivalik Block",
+       "SH-206",
+       "Quad",
+       4,
+       1,
+       3
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "label": "Q3",
+   "title": "Occupancy of every hostel (GROUP BY + aggregate + function)",
+   "sql": "SELECT h.hostel_name, h.gender_type, COUNT(r.room_id) AS rooms,\n       SUM(r.capacity) AS beds, SUM(r.occupied_count) AS occupied,\n       SUM(r.capacity) - SUM(r.occupied_count) AS vacant,\n       fn_hostel_occupancy_pct(h.hostel_id) AS occupancy_pct\n  FROM hostel h JOIN room r ON r.hostel_id = h.hostel_id\n GROUP BY h.hostel_id, h.hostel_name, h.gender_type\n ORDER BY occupancy_pct DESC;",
+   "results": [
+    {
+     "columns": [
+      "HOSTEL_NAME",
+      "GENDER_TYPE",
+      "ROOMS",
+      "BEDS",
+      "OCCUPIED",
+      "VACANT",
+      "OCCUPANCY_PCT"
+     ],
+     "rows": [
+      [
+       "Nilgiri Block",
+       "Male",
+       30,
+       73,
+       58,
+       15,
+       79.45
+      ],
+      [
+       "Vindhya Block",
+       "Male",
+       30,
+       76,
+       58,
+       18,
+       76.32
+      ],
+      [
+       "Kaveri Block",
+       "Female",
+       30,
+       70,
+       52,
+       18,
+       74.29
+      ],
+      [
+       "Shivalik Block",
+       "Male",
+       30,
+       81,
+       55,
+       26,
+       67.9
+      ],
+      [
+       "Aravali Block",
+       "Male",
+       30,
+       84,
+       57,
+       27,
+       67.86
+      ],
+      [
+       "Ganga Block",
+       "Female",
+       30,
+       84,
+       55,
+       29,
+       65.48
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "label": "Q4",
+   "title": "Complaints by category and status (GROUP BY on two columns)",
+   "sql": "SELECT category,\n       COUNT(*) AS total,\n       SUM(CASE WHEN status = 'Resolved' THEN 1 ELSE 0 END) AS resolved,\n       SUM(CASE WHEN status <> 'Resolved' THEN 1 ELSE 0 END) AS pending\n  FROM complaint\n GROUP BY category\n ORDER BY total DESC;",
+   "results": [
+    {
+     "columns": [
+      "CATEGORY",
+      "TOTAL",
+      "RESOLVED",
+      "PENDING"
+     ],
+     "rows": [
+      [
+       "Electrical",
+       129,
+       117,
+       12
+      ],
+      [
+       "Housekeeping",
+       85,
+       78,
+       7
+      ],
+      [
+       "Plumbing",
+       83,
+       67,
+       16
+      ],
+      [
+       "Network",
+       64,
+       55,
+       9
+      ],
+      [
+       "Carpentry",
+       61,
+       47,
+       14
+      ],
+      [
+       "Other",
+       38,
+       32,
+       6
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "label": "Q5",
+   "title": "Categories with average resolution time above 2 days (GROUP BY + HAVING)",
+   "sql": "SELECT category, COUNT(*) AS resolved_count,\n       ROUND(AVG(CAST(resolved_date AS DATE) - CAST(created_date AS DATE)), 2) AS avg_days_to_resolve\n  FROM complaint\n WHERE status = 'Resolved'\n GROUP BY category\nHAVING AVG(CAST(resolved_date AS DATE) - CAST(created_date AS DATE)) > 2\n ORDER BY avg_days_to_resolve DESC;",
+   "results": [
+    {
+     "columns": [
+      "CATEGORY",
+      "RESOLVED_COUNT",
+      "AVG_DAYS_TO_RESOLVE"
+     ],
+     "rows": [
+      [
+       "Carpentry",
+       47,
+       3.26
+      ],
+      [
+       "Other",
+       32,
+       2.31
+      ],
+      [
+       "Plumbing",
+       67,
+       2.04
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "label": "Q6",
+   "title": "Unresolved complaints older than 3 days with student, room and assigned staff (5-table join, outer join)",
+   "sql": "SELECT c.complaint_id, c.category, c.priority, c.status,\n       TRUNC(SYSDATE - CAST(c.created_date AS DATE)) AS days_open,\n       s.name AS student, r.room_number, st.name AS staff_name\n  FROM complaint c\n  JOIN student s              ON s.student_id = c.student_id\n  JOIN room_allocation a      ON a.student_id = s.student_id AND a.status = 'Active'\n  JOIN room r                 ON r.room_id = a.room_id\n  LEFT JOIN staff st          ON st.staff_id = c.assigned_to\n WHERE c.status <> 'Resolved'\n   AND c.created_date < SYSTIMESTAMP - INTERVAL '3' DAY\n ORDER BY days_open DESC\n FETCH FIRST 12 ROWS ONLY;",
+   "results": [
+    {
+     "columns": [
+      "COMPLAINT_ID",
+      "CATEGORY",
+      "PRIORITY",
+      "STATUS",
+      "DAYS_OPEN",
+      "STUDENT",
+      "ROOM_NUMBER",
+      "STAFF_NAME"
+     ],
+     "rows": [
+      [
+       55,
+       "Network",
+       "Low",
+       "In Progress",
+       23,
+       "Ayaan Sethi",
+       "AR-103",
+       "Ayaan Sharma"
+      ],
+      [
+       10,
+       "Plumbing",
+       "High",
+       "Assigned",
+       20,
+       "Manav Verma",
+       "SH-506",
+       "Siddharth Agarwal"
+      ],
+      [
+       44,
+       "Network",
+       "Low",
+       "Assigned",
+       20,
+       "Nandini Das",
+       "KA-305",
+       "Shaurya Bhatt"
+      ],
+      [
+       341,
+       "Carpentry",
+       "Medium",
+       "In Progress",
+       19,
+       "Mihir Reddy",
+       "SH-302",
+       "Aarav Naidu"
+      ],
+      [
+       266,
+       "Plumbing",
+       "High",
+       "In Progress",
+       19,
+       "Anjali Das",
+       "KA-204",
+       "Ayaan Menon"
+      ],
+      [
+       407,
+       "Carpentry",
+       "High",
+       "Assigned",
+       19,
+       "Aadhya Chopra",
+       "GA-305",
+       "Manav Yadav"
+      ],
+      [
+       385,
+       "Carpentry",
+       "High",
+       "Assigned",
+       18,
+       "Rishi Krishnan",
+       "SH-404",
+       "Aarav Naidu"
+      ],
+      [
+       36,
+       "Electrical",
+       "Low",
+       "In Progress",
+       17,
+       "Pranav Mishra",
+       "NI-302",
+       "Deepak Nair"
+      ],
+      [
+       420,
+       "Plumbing",
+       "High",
+       "In Progress",
+       17,
+       "Reyansh Subramanian",
+       "NI-501",
+       "Kabir Agarwal"
+      ],
+      [
+       52,
+       "Carpentry",
+       "Medium",
+       "In Progress",
+       16,
+       "Akash Pandey",
+       "NI-203",
+       "Naveen Bhatt"
+      ],
+      [
+       14,
+       "Electrical",
+       "Medium",
+       "In Progress",
+       16,
+       "Siddharth Chauhan",
+       "VI-203",
+       "Rajesh Mehta"
+      ],
+      [
+       70,
+       "Housekeeping",
+       "High",
+       "In Progress",
+       16,
+       "Gaurav Mehta",
+       "NI-304",
+       "Dev Rao"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "label": "Q7",
+   "title": "Maintenance staff workload (LEFT JOIN + GROUP BY + function)",
+   "sql": "SELECT st.staff_id, st.name AS staff_name, st.specialization, h.hostel_name,\n       COUNT(c.complaint_id) AS total_handled,\n       SUM(CASE WHEN c.status = 'Resolved' THEN 1 ELSE 0 END) AS resolved,\n       fn_staff_open_workload(st.staff_id) AS open_now\n  FROM staff st\n  JOIN hostel h          ON h.hostel_id = st.hostel_id\n  LEFT JOIN complaint c  ON c.assigned_to = st.staff_id\n WHERE st.role = 'Maintenance'\n GROUP BY st.staff_id, st.name, st.specialization, h.hostel_name\n ORDER BY open_now DESC, total_handled DESC\n FETCH FIRST 12 ROWS ONLY;",
+   "results": [
+    {
+     "columns": [
+      "STAFF_ID",
+      "STAFF_NAME",
+      "SPECIALIZATION",
+      "HOSTEL_NAME",
+      "TOTAL_HANDLED",
+      "RESOLVED",
+      "OPEN_NOW"
+     ],
+     "rows": [
+      [
+       46,
+       "Ayaan Menon",
+       "Plumbing",
+       "Kaveri Block",
+       14,
+       10,
+       4
+      ],
+      [
+       49,
+       "Shaurya Bhatt",
+       "Network",
+       "Kaveri Block",
+       17,
+       14,
+       3
+      ],
+      [
+       14,
+       "Kabir Agarwal",
+       "Plumbing",
+       "Nilgiri Block",
+       14,
+       11,
+       3
+      ],
+      [
+       31,
+       "Kunal Krishnan",
+       "Carpentry",
+       "Vindhya Block",
+       13,
+       10,
+       3
+      ],
+      [
+       23,
+       "Aarav Naidu",
+       "Carpentry",
+       "Shivalik Block",
+       12,
+       9,
+       3
+      ],
+      [
+       47,
+       "Dev Pillai",
+       "Carpentry",
+       "Kaveri Block",
+       8,
+       5,
+       3
+      ],
+      [
+       13,
+       "Deepak Nair",
+       "Electrical",
+       "Nilgiri Block",
+       24,
+       22,
+       2
+      ],
+      [
+       45,
+       "Yash Menon",
+       "Electrical",
+       "Kaveri Block",
+       12,
+       10,
+       2
+      ],
+      [
+       15,
+       "Naveen Bhatt",
+       "Carpentry",
+       "Nilgiri Block",
+       12,
+       10,
+       2
+      ],
+      [
+       9,
+       "Ayaan Sharma",
+       "Network",
+       "Aravali Block",
+       12,
+       10,
+       2
+      ],
+      [
+       10,
+       "Atharv Naidu",
+       "Plumbing",
+       "Aravali Block",
+       9,
+       7,
+       2
+      ],
+      [
+       26,
+       "Siddharth Agarwal",
+       "Plumbing",
+       "Shivalik Block",
+       5,
+       3,
+       2
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "label": "Q8",
+   "title": "Pending leave requests waiting for a warden (join + filter + sort)",
+   "sql": "SELECT l.leave_id, s.registration_no, s.name, h.hostel_name,\n       l.start_date, l.end_date, l.end_date - l.start_date + 1 AS days, l.destination\n  FROM leave_request l\n  JOIN student s          ON s.student_id = l.student_id\n  JOIN room_allocation a  ON a.student_id = s.student_id AND a.status = 'Active'\n  JOIN room r             ON r.room_id = a.room_id\n  JOIN hostel h           ON h.hostel_id = r.hostel_id\n WHERE l.status = 'Pending'\n ORDER BY l.start_date\n FETCH FIRST 12 ROWS ONLY;",
+   "results": [
+    {
+     "columns": [
+      "LEAVE_ID",
+      "REGISTRATION_NO",
+      "NAME",
+      "HOSTEL_NAME",
+      "START_DATE",
+      "END_DATE",
+      "DAYS",
+      "DESTINATION"
+     ],
+     "rows": [
+      [
+       141,
+       "25BME1046",
+       "Aditya Das",
+       "Nilgiri Block",
+       "08-10-2026",
+       "14-10-2026",
+       7,
+       "Pune"
+      ],
+      [
+       182,
+       "24BIT1069",
+       "Priya Agarwal",
+       "Kaveri Block",
+       "08-10-2026",
+       "11-10-2026",
+       4,
+       "Mumbai"
+      ],
+      [
+       222,
+       "25BAI1048",
+       "Prakash Verma",
+       "Nilgiri Block",
+       "08-10-2026",
+       "11-10-2026",
+       4,
+       "Madurai"
+      ],
+      [
+       224,
+       "25BYB1044",
+       "Kabir Malhotra",
+       "Vindhya Block",
+       "09-10-2026",
+       "14-10-2026",
+       6,
+       "Bhopal"
+      ],
+      [
+       143,
+       "26BYB1011",
+       "Naveen Singh",
+       "Aravali Block",
+       "10-10-2026",
+       "13-10-2026",
+       4,
+       "Chandigarh"
+      ],
+      [
+       117,
+       "26BME1041",
+       "Tanmay Chopra",
+       "Nilgiri Block",
+       "10-10-2026",
+       "15-10-2026",
+       6,
+       "Chandigarh"
+      ],
+      [
+       133,
+       "26BEC1045",
+       "Keerthana Patel",
+       "Ganga Block",
+       "11-10-2026",
+       "15-10-2026",
+       5,
+       "Kolkata"
+      ],
+      [
+       3,
+       "24BYB1001",
+       "Aarav Mehta",
+       "Aravali Block",
+       "12-10-2026",
+       "15-10-2026",
+       4,
+       "New Delhi"
+      ],
+      [
+       202,
+       "23BME1019",
+       "Prakash Bose",
+       "Aravali Block",
+       "12-10-2026",
+       "18-10-2026",
+       7,
+       "Patna"
+      ],
+      [
+       4,
+       "24BYB1001",
+       "Aarav Mehta",
+       "Aravali Block",
+       "13-10-2026",
+       "16-10-2026",
+       4,
+       "Mumbai"
+      ],
+      [
+       83,
+       "24BIT1071",
+       "Ishita Mehta",
+       "Ganga Block",
+       "15-10-2026",
+       "19-10-2026",
+       5,
+       "New Delhi"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "label": "Q9",
+   "title": "Leave approval rate of each warden (GROUP BY + HAVING)",
+   "sql": "SELECT st.name AS staff_name, h.hostel_name,\n       COUNT(*) AS decided,\n       SUM(CASE WHEN l.status = 'Approved' THEN 1 ELSE 0 END) AS approved,\n       ROUND(100 * SUM(CASE WHEN l.status = 'Approved' THEN 1 ELSE 0 END) / COUNT(*), 1) AS approval_pct\n  FROM leave_request l\n  JOIN staff st  ON st.staff_id = l.approved_by\n  JOIN hostel h  ON h.hostel_id = st.hostel_id\n GROUP BY st.name, h.hostel_name\nHAVING COUNT(*) >= 10\n ORDER BY decided DESC;",
+   "results": [
+    {
+     "columns": [
+      "STAFF_NAME",
+      "HOSTEL_NAME",
+      "DECIDED",
+      "APPROVED",
+      "APPROVAL_PCT"
+     ],
+     "rows": [
+      [
+       "Muskan Deshmukh",
+       "Ganga Block",
+       29,
+       23,
+       79.3
+      ],
+      [
+       "Karan Kumar",
+       "Vindhya Block",
+       27,
+       24,
+       88.9
+      ],
+      [
+       "Aniket Jain",
+       "Shivalik Block",
+       26,
+       24,
+       92.3
+      ],
+      [
+       "Divya Gill",
+       "Kaveri Block",
+       23,
+       19,
+       82.6
+      ],
+      [
+       "Sarthak Bose",
+       "Nilgiri Block",
+       23,
+       21,
+       91.3
+      ],
+      [
+       "Suresh Iyer",
+       "Aravali Block",
+       23,
+       21,
+       91.3
+      ],
+      [
+       "Gaurav Sethi",
+       "Shivalik Block",
+       21,
+       19,
+       90.5
+      ],
+      [
+       "Abhinav Rao",
+       "Vindhya Block",
+       21,
+       19,
+       90.5
+      ],
+      [
+       "Tanmay Jain",
+       "Nilgiri Block",
+       19,
+       16,
+       84.2
+      ],
+      [
+       "Karan Mishra",
+       "Aravali Block",
+       19,
+       17,
+       89.5
+      ],
+      [
+       "Sneha Banerjee",
+       "Kaveri Block",
+       18,
+       15,
+       83.3
+      ],
+      [
+       "Saanvi Krishnan",
+       "Ganga Block",
+       10,
+       8,
+       80
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "label": "Q10",
+   "title": "Visitors expected in the next 7 days with approved passes",
+   "sql": "SELECT v.pass_id, v.visit_date, v.visitor_name, v.relation_to_student, s.name AS student, v.qr_code\n  FROM visitor_pass v JOIN student s ON s.student_id = v.student_id\n WHERE v.status = 'Approved'\n   AND v.visit_date BETWEEN TRUNC(SYSDATE) AND TRUNC(SYSDATE) + 7\n ORDER BY v.visit_date, v.visitor_name;",
+   "results": [
+    {
+     "columns": [
+      "PASS_ID",
+      "VISIT_DATE",
+      "VISITOR_NAME",
+      "RELATION_TO_STUDENT",
+      "STUDENT",
+      "QR_CODE"
+     ],
+     "rows": [
+      [
+       258,
+       "08-10-2026",
+       "Ananya Menon",
+       "Cousin",
+       "Aarav Reddy",
+       "SHMS-VP-258-5D459ED1"
+      ],
+      [
+       2,
+       "09-10-2026",
+       "Siddharth Reddy",
+       "Friend",
+       "Aarav Mehta",
+       "SHMS-VP-2-5D459ED1"
+      ],
+      [
+       39,
+       "10-10-2026",
+       "Gaurav Verma",
+       "Friend",
+       "Om Gupta",
+       "SHMS-VP-39-5D459ED1"
+      ],
+      [
+       22,
+       "10-10-2026",
+       "Manav Rathore",
+       "Uncle",
+       "Kavya Mehta",
+       "SHMS-VP-22-5D459ED1"
+      ],
+      [
+       34,
+       "11-10-2026",
+       "Suresh Jain",
+       "Uncle",
+       "Ishaan Sharma",
+       "SHMS-VP-34-5D459ED1"
+      ],
+      [
+       54,
+       "11-10-2026",
+       "Swati Reddy",
+       "Sister",
+       "Kunal Reddy",
+       "SHMS-VP-54-5D459ED1"
+      ],
+      [
+       21,
+       "11-10-2026",
+       "Vikram Bose",
+       "Brother",
+       "Vedant Bose",
+       "SHMS-VP-21-5D459ED1"
+      ],
+      [
+       46,
+       "13-10-2026",
+       "Aditi Menon",
+       "Mother",
+       "Aditi Menon",
+       "SHMS-VP-46-5D459ED1"
+      ],
+      [
+       181,
+       "13-10-2026",
+       "Rishi Verma",
+       "Guardian",
+       "Sarthak Jain",
+       "SHMS-VP-181-5D459ED1"
+      ],
+      [
+       91,
+       "13-10-2026",
+       "Saanvi Kulkarni",
+       "Guardian",
+       "Karan Agarwal",
+       "SHMS-VP-91-5D459ED1"
+      ],
+      [
+       132,
+       "14-10-2026",
+       "Riya Das",
+       "Aunt",
+       "Rajesh Mukherjee",
+       "SHMS-VP-132-5D459ED1"
+      ],
+      [
+       20,
+       "14-10-2026",
+       "Simran Mehta",
+       "Sister",
+       "Prakash Mehta",
+       "SHMS-VP-20-5D459ED1"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "label": "Q11",
+   "title": "Visitor passes per month and status (date grouping)",
+   "sql": "SELECT TO_CHAR(visit_date, 'YYYY-MM') AS month,\n       COUNT(*) AS requests,\n       SUM(CASE WHEN status IN ('Approved', 'Completed') THEN 1 ELSE 0 END) AS approved,\n       SUM(CASE WHEN status = 'Rejected' THEN 1 ELSE 0 END) AS rejected,\n       SUM(CASE WHEN status = 'Pending' THEN 1 ELSE 0 END) AS pending\n  FROM visitor_pass\n GROUP BY TO_CHAR(visit_date, 'YYYY-MM')\n ORDER BY month;",
+   "results": [
+    {
+     "columns": [
+      "MONTH",
+      "REQUESTS",
+      "APPROVED",
+      "REJECTED",
+      "PENDING"
+     ],
+     "rows": [
+      [
+       "2026-07",
+       32,
+       30,
+       2,
+       0
+      ],
+      [
+       "2026-08",
+       81,
+       70,
+       11,
+       0
+      ],
+      [
+       "2026-09",
+       85,
+       72,
+       13,
+       0
+      ],
+      [
+       "2026-10",
+       72,
+       43,
+       2,
+       27
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "label": "Q12",
+   "title": "Students waiting for a room (NOT EXISTS subquery)",
+   "sql": "SELECT s.registration_no, s.name, s.gender, s.year, s.branch\n  FROM student s\n WHERE NOT EXISTS (SELECT 1 FROM room_allocation a\n                    WHERE a.student_id = s.student_id AND a.status = 'Active')\n ORDER BY s.year, s.registration_no\n FETCH FIRST 12 ROWS ONLY;",
+   "results": [
+    {
+     "columns": [
+      "REGISTRATION_NO",
+      "NAME",
+      "GENDER",
+      "YEAR",
+      "BRANCH"
+     ],
+     "rows": [
+      [
+       "26BAI1089",
+       "Arjun Patel",
+       "Male",
+       1,
+       "CSE (Artificial Intelligence)"
+      ],
+      [
+       "26BCE1060",
+       "Priya Menon",
+       "Female",
+       1,
+       "Computer Science and Engineering"
+      ],
+      [
+       "26BEC1034",
+       "Vikram Naidu",
+       "Male",
+       1,
+       "Electronics and Communication"
+      ],
+      [
+       "26BME1044",
+       "Arjun Rao",
+       "Male",
+       1,
+       "Mechanical Engineering"
+      ],
+      [
+       "26BME1055",
+       "Pranav Singh",
+       "Male",
+       1,
+       "Mechanical Engineering"
+      ],
+      [
+       "26BYB1025",
+       "Siddharth Mukherjee",
+       "Male",
+       1,
+       "CSE (Cyber Security)"
+      ],
+      [
+       "26BYB1030",
+       "Sahil Shah",
+       "Male",
+       1,
+       "CSE (Cyber Security)"
+      ],
+      [
+       "26BYB1060",
+       "Shaurya Shah",
+       "Male",
+       1,
+       "CSE (Cyber Security)"
+      ],
+      [
+       "25BAI1085",
+       "Swati Patel",
+       "Female",
+       2,
+       "CSE (Artificial Intelligence)"
+      ],
+      [
+       "25BCE1020",
+       "Tanmay Deshmukh",
+       "Male",
+       2,
+       "Computer Science and Engineering"
+      ],
+      [
+       "25BME1006",
+       "Om Das",
+       "Male",
+       2,
+       "Mechanical Engineering"
+      ],
+      [
+       "25BME1052",
+       "Aishwarya Tiwari",
+       "Female",
+       2,
+       "Mechanical Engineering"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "label": "Q13",
+   "title": "Students who raised more complaints than the average student (nested subquery in HAVING)",
+   "sql": "SELECT s.registration_no, s.name, COUNT(c.complaint_id) AS complaints\n  FROM student s JOIN complaint c ON c.student_id = s.student_id\n GROUP BY s.registration_no, s.name\nHAVING COUNT(c.complaint_id) > (SELECT AVG(cnt) FROM (SELECT COUNT(*) AS cnt FROM complaint GROUP BY student_id))\n ORDER BY complaints DESC\n FETCH FIRST 12 ROWS ONLY;",
+   "results": [
+    {
+     "columns": [
+      "REGISTRATION_NO",
+      "NAME",
+      "COMPLAINTS"
+     ],
+     "rows": [
+      [
+       "24BYB1001",
+       "Aarav Mehta",
+       6
+      ],
+      [
+       "24BCE1005",
+       "Rahul Das",
+       5
+      ],
+      [
+       "25BIT1078",
+       "Reyansh Yadav",
+       5
+      ],
+      [
+       "26BME1049",
+       "Dev Deshmukh",
+       5
+      ],
+      [
+       "25BEC1051",
+       "Vedant Banerjee",
+       5
+      ],
+      [
+       "23BIT1003",
+       "Reyansh Subramanian",
+       5
+      ],
+      [
+       "26BME1008",
+       "Abhinav Sethi",
+       5
+      ],
+      [
+       "23BEC1010",
+       "Vedant Rathore",
+       4
+      ],
+      [
+       "24BYB1025",
+       "Vaishnavi Rao",
+       4
+      ],
+      [
+       "24BME1034",
+       "Vikram Saxena",
+       4
+      ],
+      [
+       "24BCE1024",
+       "Rajesh Mukherjee",
+       4
+      ],
+      [
+       "23BME1071",
+       "Ishita Mukherjee",
+       4
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "label": "Q14",
+   "title": "Rooms that are completely full in the hostel with the highest occupancy (subquery in WHERE)",
+   "sql": "SELECT h.hostel_name, r.room_number, r.room_type, r.occupied_count || '/' || r.capacity AS occupancy\n  FROM room r JOIN hostel h ON h.hostel_id = r.hostel_id\n WHERE r.occupied_count = r.capacity\n   AND r.hostel_id = (SELECT hostel_id FROM hostel\n                       ORDER BY fn_hostel_occupancy_pct(hostel_id) DESC FETCH FIRST 1 ROW ONLY)\n ORDER BY r.room_number;",
+   "results": [
+    {
+     "columns": [
+      "HOSTEL_NAME",
+      "ROOM_NUMBER",
+      "ROOM_TYPE",
+      "OCCUPANCY"
+     ],
+     "rows": [
+      [
+       "Nilgiri Block",
+       "NI-103",
+       "Double",
+       "2/2"
+      ],
+      [
+       "Nilgiri Block",
+       "NI-104",
+       "Double",
+       "2/2"
+      ],
+      [
+       "Nilgiri Block",
+       "NI-202",
+       "Single",
+       "1/1"
+      ],
+      [
+       "Nilgiri Block",
+       "NI-203",
+       "Triple",
+       "3/3"
+      ],
+      [
+       "Nilgiri Block",
+       "NI-204",
+       "Double",
+       "2/2"
+      ],
+      [
+       "Nilgiri Block",
+       "NI-205",
+       "Double",
+       "2/2"
+      ],
+      [
+       "Nilgiri Block",
+       "NI-206",
+       "Double",
+       "2/2"
+      ],
+      [
+       "Nilgiri Block",
+       "NI-301",
+       "Triple",
+       "3/3"
+      ],
+      [
+       "Nilgiri Block",
+       "NI-302",
+       "Double",
+       "2/2"
+      ],
+      [
+       "Nilgiri Block",
+       "NI-303",
+       "Double",
+       "2/2"
+      ],
+      [
+       "Nilgiri Block",
+       "NI-304",
+       "Triple",
+       "3/3"
+      ],
+      [
+       "Nilgiri Block",
+       "NI-305",
+       "Triple",
+       "3/3"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "label": "Q15",
+   "title": "Room-type utilisation across all hostels (GROUP BY + ratio)",
+   "sql": "SELECT room_type, COUNT(*) AS rooms, SUM(capacity) AS beds, SUM(occupied_count) AS occupied,\n       ROUND(100 * SUM(occupied_count) / SUM(capacity), 1) AS utilisation_pct\n  FROM room\n GROUP BY room_type\n ORDER BY MIN(capacity);",
+   "results": [
+    {
+     "columns": [
+      "ROOM_TYPE",
+      "ROOMS",
+      "BEDS",
+      "OCCUPIED",
+      "UTILISATION_PCT"
+     ],
+     "rows": [
+      [
+       "Single",
+       17,
+       17,
+       16,
+       94.1
+      ],
+      [
+       "Double",
+       65,
+       130,
+       114,
+       87.7
+      ],
+      [
+       "Triple",
+       71,
+       213,
+       150,
+       70.4
+      ],
+      [
+       "Quad",
+       27,
+       108,
+       55,
+       50.9
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "label": "Q16",
+   "title": "Students with outstanding fees for the current semester (extension table, join + aggregate)",
+   "sql": "SELECT s.registration_no, s.name,\n       SUM(f.amount_due) AS due, SUM(f.amount_paid) AS paid,\n       SUM(f.amount_due - f.amount_paid) AS outstanding\n  FROM fee_payment f JOIN student s ON s.student_id = f.student_id\n WHERE f.semester = '2026-27 Odd'\n GROUP BY s.registration_no, s.name\nHAVING SUM(f.amount_due - f.amount_paid) > 0\n ORDER BY outstanding DESC\n FETCH FIRST 12 ROWS ONLY;",
+   "results": [
+    {
+     "columns": [
+      "REGISTRATION_NO",
+      "NAME",
+      "DUE",
+      "PAID",
+      "OUTSTANDING"
+     ],
+     "rows": [
+      [
+       "26BAI1111",
+       "Suresh Patel",
+       101500,
+       10000,
+       91500
+      ],
+      [
+       "24BYB1009",
+       "Vedant Gupta",
+       91500,
+       0,
+       91500
+      ],
+      [
+       "24BEC1021",
+       "Varun Mehta",
+       109500,
+       27500,
+       82000
+      ],
+      [
+       "23BYB1065",
+       "Meera Kumar",
+       72500,
+       0,
+       72500
+      ],
+      [
+       "25BME1060",
+       "Nandini Saxena",
+       72500,
+       0,
+       72500
+      ],
+      [
+       "25BAI1043",
+       "Akash Joshi",
+       91500,
+       27500,
+       64000
+      ],
+      [
+       "26BME1106",
+       "Nandini Singh",
+       101500,
+       37500,
+       64000
+      ],
+      [
+       "24BYB1041",
+       "Sneha Sethi",
+       91500,
+       27500,
+       64000
+      ],
+      [
+       "23BME1036",
+       "Nikhil Kapoor",
+       91500,
+       27500,
+       64000
+      ],
+      [
+       "25BEC1095",
+       "Diya Krishnan",
+       91500,
+       27500,
+       64000
+      ],
+      [
+       "23BME1059",
+       "Ishita Bose",
+       91500,
+       27500,
+       64000
+      ],
+      [
+       "26BAI1100",
+       "Yash Subramanian",
+       101500,
+       37500,
+       64000
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "label": "Q17",
+   "title": "Hostel staff directory / emergency contacts (wardens and maintenance per hostel)",
+   "sql": "SELECT h.hostel_name, st.role, NVL(st.specialization, '-') AS specialization, st.name AS staff_name, st.phone\n  FROM staff st JOIN hostel h ON h.hostel_id = st.hostel_id\n WHERE h.hostel_id = 1\n ORDER BY CASE st.role WHEN 'Warden' THEN 1 WHEN 'Admin' THEN 2 ELSE 3 END, st.specialization;",
+   "results": [
+    {
+     "columns": [
+      "HOSTEL_NAME",
+      "ROLE",
+      "SPECIALIZATION",
+      "STAFF_NAME",
+      "PHONE"
+     ],
+     "rows": [
+      [
+       "Aravali Block",
+       "Warden",
+       "-",
+       "Karan Mishra",
+       "8682052589"
+      ],
+      [
+       "Aravali Block",
+       "Warden",
+       "-",
+       "Suresh Iyer",
+       "7646861642"
+      ],
+      [
+       "Aravali Block",
+       "Admin",
+       "-",
+       "Meera Krishnan",
+       "9718841330"
+      ],
+      [
+       "Aravali Block",
+       "Admin",
+       "-",
+       "Rajesh Kulkarni",
+       "9370283822"
+      ],
+      [
+       "Aravali Block",
+       "Maintenance",
+       "Carpentry",
+       "Ishaan Bose",
+       "6621052185"
+      ],
+      [
+       "Aravali Block",
+       "Maintenance",
+       "Electrical",
+       "Prakash Naidu",
+       "8247764725"
+      ],
+      [
+       "Aravali Block",
+       "Maintenance",
+       "Housekeeping",
+       "Manav Subramanian",
+       "6452441064"
+      ],
+      [
+       "Aravali Block",
+       "Maintenance",
+       "Network",
+       "Ayaan Sharma",
+       "6130411895"
+      ],
+      [
+       "Aravali Block",
+       "Maintenance",
+       "Plumbing",
+       "Atharv Naidu",
+       "6659397615"
+      ],
+      [
+       "Aravali Block",
+       "Maintenance",
+       "Plumbing",
+       "Naveen Chopra",
+       "6948939494"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "label": "Q18",
+   "title": "Branch-wise residents and average CGPA of current residents (IN subquery + GROUP BY)",
+   "sql": "SELECT branch, COUNT(*) AS residents, ROUND(AVG(cgpa), 2) AS avg_cgpa\n  FROM student\n WHERE student_id IN (SELECT student_id FROM room_allocation WHERE status = 'Active')\n GROUP BY branch\n ORDER BY residents DESC;",
+   "results": [
+    {
+     "columns": [
+      "BRANCH",
+      "RESIDENTS",
+      "AVG_CGPA"
+     ],
+     "rows": [
+      [
+       "CSE (Artificial Intelligence)",
+       73,
+       7.86
+      ],
+      [
+       "Information Technology",
+       57,
+       7.89
+      ],
+      [
+       "CSE (Cyber Security)",
+       55,
+       7.94
+      ],
+      [
+       "Mechanical Engineering",
+       55,
+       7.83
+      ],
+      [
+       "Electronics and Communication",
+       51,
+       7.91
+      ],
+      [
+       "Computer Science and Engineering",
+       44,
+       7.84
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "label": "Q19",
+   "title": "INSERT a new student registration",
+   "sql": "INSERT INTO student (registration_no, name, email, phone, gender, year, branch, cgpa, password_hash)\nVALUES ('26BYB1999', 'Demo New Student', 'demo.new@student.shms.local', '9000000099', 'Male', 1,\n        'CSE (Cyber Security)', 8.10, '$2b$10$demoHashOnlyForThisInsertxxxxxxxxxxxxxxxxxxxxxxxxxxxx');\nSELECT student_id, registration_no, name, year FROM student WHERE registration_no = '26BYB1999';",
+   "results": [
+    {
+     "message": "1 row(s) affected"
+    },
+    {
+     "columns": [
+      "STUDENT_ID",
+      "REGISTRATION_NO",
+      "NAME",
+      "YEAR"
+     ],
+     "rows": [
+      [
+       361,
+       "26BYB1999",
+       "Demo New Student",
+       1
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "label": "Q20",
+   "title": "UPDATE: warden reschedules all Assigned complaints of Aravali Block to tomorrow",
+   "sql": "UPDATE complaint c\n   SET scheduled_date = TRUNC(SYSDATE) + 1\n WHERE c.status = 'Assigned'\n   AND c.assigned_to IN (SELECT staff_id FROM staff WHERE hostel_id = 1);",
+   "results": [
+    {
+     "message": "4 row(s) affected"
+    }
+   ]
+  },
+  {
+   "label": "Q21",
+   "title": "DELETE: remove withdrawn marketplace listings older than 30 days",
+   "sql": "DELETE FROM marketplace_listing\n WHERE status = 'Withdrawn'\n   AND listed_date < SYSDATE - 30;",
+   "results": [
+    {
+     "message": "2 row(s) affected"
+    }
+   ]
+  }
+ ]
+}

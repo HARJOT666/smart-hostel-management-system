@@ -221,7 +221,18 @@ Tested: 5 × 401 → counter 1..5 → 6th attempt 429 → wait for expiry → 20
 
 ---
 
-## 6. Problems we hit (from docs/development-log.md)
+## 6. Frontend in one minute
+
+- React single-page app built with Vite. **React Router** decides which page to show; `ProtectedRoute` sends users
+  without the right role back to their own home page.
+- After login the JWT is kept in `localStorage`; an **Axios interceptor** adds `Authorization: Bearer …` to every call
+  and sends the user to the login page on a 401.
+- The `useApi` hook loads data and tracks *loading* / *error* states, so every page shows a spinner, an error box or
+  the data. Toast messages confirm actions; Oracle rule violations are shown with their message
+  (e.g. "Room is full").
+- Separate menus and pages for students, admin/warden and maintenance staff.
+
+## 7. Problems we hit (from docs/development-log.md)
 
 1. **Duplicate registration number** in the generated data → caught by the UNIQUE constraint; fixed the generator.
 2. **SQL*Plus committed half a failed script** (`EXIT` commits by default) → changed to `EXIT ... ROLLBACK`.
@@ -232,3 +243,9 @@ Tested: 5 × 401 → counter 1..5 → 6th attempt 429 → wait for expiry → 20
 6. **Time-zone bug:** Oracle container in UTC, app in IST → resolved time looked earlier than created time →
    `ORA-02290 CK_COMPLAINT_RESOLVED`. Fixed by running the Oracle container in `Asia/Kolkata`.
 7. **Test-script bug** (`grep -c` exit code) → fixed.
+8. **Chart colour too grey** → the colour validator failed it; a stronger colour was chosen for charts.
+9. **Stale search results (race condition)** in React: an older, slower request overwrote newer results.
+   Fixed in `useApi` by ignoring answers from outdated requests.
+10. **UI-test mistakes** (didn't wait for the table; test text also existed in the seed data) → fixed the test.
+11. **Spring Data Redis start-up messages** → Redis repositories switched off (we only use the cache and a template).
+12. **Uploaded test images almost pushed to GitHub** → `.gitignore` fixed before pushing.

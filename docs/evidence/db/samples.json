@@ -1,0 +1,970 @@
+{
+ "HOSTEL": {
+  "columns": [
+   "HOSTEL_ID",
+   "HOSTEL_NAME",
+   "GENDER_TYPE",
+   "LOCATION",
+   "TOTAL_FLOORS"
+  ],
+  "rows": [
+   [
+    1,
+    "Aravali Block",
+    "Male",
+    "North Campus, near Main Gate",
+    5
+   ],
+   [
+    2,
+    "Nilgiri Block",
+    "Male",
+    "North Campus, behind Library",
+    5
+   ],
+   [
+    3,
+    "Shivalik Block",
+    "Male",
+    "East Campus, near Sports Complex",
+    5
+   ],
+   [
+    4,
+    "Vindhya Block",
+    "Male",
+    "East Campus, near Food Court",
+    5
+   ],
+   [
+    5,
+    "Ganga Block",
+    "Female",
+    "South Campus, near Health Centre",
+    5
+   ]
+  ]
+ },
+ "ROOM": {
+  "columns": [
+   "ROOM_ID",
+   "ROOM_NUMBER",
+   "FLOOR_NO",
+   "ROOM_TYPE",
+   "CAPACITY",
+   "OCCUPIED_COUNT",
+   "HOSTEL_ID"
+  ],
+  "rows": [
+   [
+    1,
+    "AR-101",
+    1,
+    "Double",
+    2,
+    2,
+    1
+   ],
+   [
+    2,
+    "AR-102",
+    1,
+    "Triple",
+    3,
+    3,
+    1
+   ],
+   [
+    3,
+    "AR-103",
+    1,
+    "Triple",
+    3,
+    3,
+    1
+   ],
+   [
+    4,
+    "AR-104",
+    1,
+    "Quad",
+    4,
+    4,
+    1
+   ],
+   [
+    5,
+    "AR-105",
+    1,
+    "Double",
+    2,
+    2,
+    1
+   ]
+  ]
+ },
+ "STUDENT": {
+  "columns": [
+   "STUDENT_ID",
+   "REGISTRATION_NO",
+   "NAME",
+   "EMAIL",
+   "PHONE",
+   "GENDER",
+   "YEAR",
+   "BRANCH",
+   "CGPA",
+   "PASSWORD_HASH"
+  ],
+  "rows": [
+   [
+    1,
+    "24BYB1001",
+    "Aarav Mehta",
+    "aarav.mehta.24byb1001@student.shms.local",
+    "7576990854",
+    "Male",
+    3,
+    "CSE (Cyber Security)",
+    8.29,
+    "$2b$10$wF/tr..."
+   ],
+   [
+    2,
+    "23BCE1008",
+    "Atharv Agarwal",
+    "atharv.agarwal.23bce1008@student.shms.local",
+    "6440190187",
+    "Male",
+    4,
+    "Computer Science and Engineering",
+    8.21,
+    "$2b$10$wF/tr..."
+   ],
+   [
+    3,
+    "25BEC1008",
+    "Deepak Pandey",
+    "deepak.pandey.25bec1008@student.shms.local",
+    "8201612840",
+    "Male",
+    2,
+    "Electronics and Communication",
+    7.4,
+    "$2b$10$wF/tr..."
+   ],
+   [
+    4,
+    "23BYB1002",
+    "Vikram Rathore",
+    "vikram.rathore.23byb1002@student.shms.local",
+    "6524735736",
+    "Male",
+    4,
+    "CSE (Cyber Security)",
+    7.77,
+    "$2b$10$wF/tr..."
+   ],
+   [
+    5,
+    "26BIT1007",
+    "Aditya Chauhan",
+    "aditya.chauhan.26bit1007@student.shms.local",
+    "7197967807",
+    "Male",
+    1,
+    "Information Technology",
+    7.9,
+    "$2b$10$wF/tr..."
+   ]
+  ]
+ },
+ "STAFF": {
+  "columns": [
+   "STAFF_ID",
+   "NAME",
+   "ROLE",
+   "SPECIALIZATION",
+   "PHONE",
+   "EMAIL",
+   "HOSTEL_ID",
+   "PASSWORD_HASH"
+  ],
+  "rows": [
+   [
+    1,
+    "Rajesh Kulkarni",
+    "Admin",
+    null,
+    "9370283822",
+    "admin@shms.local",
+    1,
+    "$2b$10$wF/tr..."
+   ],
+   [
+    2,
+    "Suresh Iyer",
+    "Warden",
+    null,
+    "7646861642",
+    "warden@shms.local",
+    1,
+    "$2b$10$wF/tr..."
+   ],
+   [
+    3,
+    "Prakash Naidu",
+    "Maintenance",
+    "Electrical",
+    "8247764725",
+    "maint@shms.local",
+    1,
+    "$2b$10$wF/tr..."
+   ],
+   [
+    4,
+    "Meera Krishnan",
+    "Admin",
+    null,
+    "9718841330",
+    "meera.krishnan4@shms.local",
+    1,
+    "$2b$10$wF/tr..."
+   ],
+   [
+    5,
+    "Karan Mishra",
+    "Warden",
+    null,
+    "8682052589",
+    "karan.mishra5@shms.local",
+    1,
+    "$2b$10$wF/tr..."
+   ]
+  ]
+ },
+ "ROOM_ALLOCATION": {
+  "columns": [
+   "ALLOCATION_ID",
+   "STUDENT_ID",
+   "ROOM_ID",
+   "ALLOCATED_BY",
+   "BED_NUMBER",
+   "ALLOCATION_DATE",
+   "VACATE_DATE",
+   "STATUS"
+  ],
+  "rows": [
+   [
+    1,
+    1,
+    106,
+    11,
+    1,
+    "15-07-2025",
+    "10-05-2026",
+    "Vacated"
+   ],
+   [
+    2,
+    4,
+    59,
+    19,
+    1,
+    "10-07-2025",
+    "14-05-2026",
+    "Vacated"
+   ],
+   [
+    3,
+    7,
+    2,
+    19,
+    3,
+    "20-07-2025",
+    "14-05-2026",
+    "Vacated"
+   ],
+   [
+    4,
+    11,
+    26,
+    19,
+    2,
+    "10-07-2025",
+    "18-05-2026",
+    "Vacated"
+   ],
+   [
+    5,
+    12,
+    101,
+    28,
+    1,
+    "12-07-2025",
+    "19-05-2026",
+    "Vacated"
+   ]
+  ]
+ },
+ "COMPLAINT": {
+  "columns": [
+   "COMPLAINT_ID",
+   "STUDENT_ID",
+   "ASSIGNED_TO",
+   "CATEGORY",
+   "DESCRIPTION",
+   "PRIORITY",
+   "STATUS",
+   "CREATED_DATE",
+   "RESOLVED_DATE",
+   "REMARKS",
+   "SCHEDULED_DATE",
+   "IMAGE_PATH",
+   "COMPLETION_IMAGE_PATH"
+  ],
+  "rows": [
+   [
+    1,
+    1,
+    7,
+    "Carpentry",
+    "Window frame is loose and does not close.",
+    "High",
+    "Resolved",
+    "28-08-2026 11:54",
+    "29-08-2026 20:54",
+    "Issue fixed and tested.",
+    null,
+    null,
+    null
+   ],
+   [
+    2,
+    1,
+    7,
+    "Carpentry",
+    "Chair leg is broken.",
+    "Medium",
+    "Resolved",
+    "12-09-2026 09:47",
+    "15-09-2026 22:47",
+    "Repaired on site; student confirmed.",
+    null,
+    null,
+    null
+   ],
+   [
+    3,
+    1,
+    10,
+    "Plumbing",
+    "Flush tank is not working in the attached bathroom.",
+    "Medium",
+    "In Progress",
+    "01-10-2026 08:24",
+    null,
+    null,
+    "03-10-2026",
+    null,
+    null
+   ],
+   [
+    4,
+    1,
+    10,
+    "Plumbing",
+    "Flush tank is not working in the attached bathroom.",
+    "Medium",
+    "Assigned",
+    "04-10-2026 10:52",
+    null,
+    null,
+    "07-10-2026",
+    null,
+    null
+   ],
+   [
+    5,
+    1,
+    null,
+    "Electrical",
+    "Tube light flickers continuously.",
+    "Medium",
+    "Open",
+    "06-10-2026 11:19",
+    null,
+    null,
+    null,
+    null,
+    null
+   ]
+  ]
+ },
+ "LEAVE_REQUEST": {
+  "columns": [
+   "LEAVE_ID",
+   "STUDENT_ID",
+   "APPROVED_BY",
+   "START_DATE",
+   "END_DATE",
+   "REASON",
+   "DESTINATION",
+   "APPLIED_DATE",
+   "STATUS"
+  ],
+  "rows": [
+   [
+    1,
+    1,
+    2,
+    "30-08-2026",
+    "02-09-2026",
+    "Medical check-up at home town",
+    "Indore",
+    "25-08-2026",
+    "Approved"
+   ],
+   [
+    2,
+    1,
+    2,
+    "29-08-2026",
+    "01-09-2026",
+    "Medical check-up at home town",
+    "Mumbai",
+    "20-08-2026",
+    "Rejected"
+   ],
+   [
+    3,
+    1,
+    null,
+    "12-10-2026",
+    "15-10-2026",
+    "Going home for Diwali festival",
+    "New Delhi",
+    "06-10-2026",
+    "Pending"
+   ],
+   [
+    4,
+    1,
+    null,
+    "13-10-2026",
+    "16-10-2026",
+    "Sister's wedding",
+    "Mumbai",
+    "06-10-2026",
+    "Pending"
+   ],
+   [
+    5,
+    205,
+    28,
+    "18-08-2026",
+    "24-08-2026",
+    "Internship interview",
+    "Bengaluru",
+    "16-08-2026",
+    "Approved"
+   ]
+  ]
+ },
+ "VISITOR_PASS": {
+  "columns": [
+   "PASS_ID",
+   "STUDENT_ID",
+   "APPROVED_BY",
+   "VISITOR_NAME",
+   "VISITOR_PHONE",
+   "RELATION_TO_STUDENT",
+   "PURPOSE",
+   "VISIT_DATE",
+   "ENTRY_TIME",
+   "EXIT_TIME",
+   "QR_CODE",
+   "STATUS"
+  ],
+  "rows": [
+   [
+    1,
+    1,
+    5,
+    "Tanmay Mehta",
+    "6882326420",
+    "Father",
+    "Visiting after exams",
+    "28-09-2026",
+    "28-09-2026 15:36",
+    "28-09-2026 16:36",
+    "SHMS-VP-1-5D459ED1",
+    "Completed"
+   ],
+   [
+    2,
+    1,
+    2,
+    "Siddharth Reddy",
+    "8440949782",
+    "Friend",
+    "Visiting after exams",
+    "09-10-2026",
+    null,
+    null,
+    "SHMS-VP-2-5D459ED1",
+    "Approved"
+   ],
+   [
+    3,
+    1,
+    null,
+    "Ishita Krishnan",
+    "7582604126",
+    "Aunt",
+    "Collecting documents",
+    "12-10-2026",
+    null,
+    null,
+    null,
+    "Pending"
+   ],
+   [
+    4,
+    1,
+    5,
+    "Manav Yadav",
+    "6311309573",
+    "Uncle",
+    "Parent-teacher meeting",
+    "04-10-2026",
+    null,
+    null,
+    null,
+    "Rejected"
+   ],
+   [
+    5,
+    307,
+    36,
+    "Nikhil Joshi",
+    "8150398603",
+    "Cousin",
+    "Collecting documents",
+    "23-07-2026",
+    "23-07-2026 15:36",
+    "23-07-2026 16:37",
+    "SHMS-VP-5-5D459ED1",
+    "Completed"
+   ]
+  ]
+ },
+ "FEE_PAYMENT": {
+  "columns": [
+   "PAYMENT_ID",
+   "STUDENT_ID",
+   "SEMESTER",
+   "FEE_TYPE",
+   "AMOUNT_DUE",
+   "AMOUNT_PAID",
+   "DUE_DATE",
+   "PAID_DATE",
+   "PAYMENT_MODE",
+   "TRANSACTION_REF"
+  ],
+  "rows": [
+   [
+    1,
+    1,
+    "2025-26 Even",
+    "Hostel Rent",
+    64000,
+    64000,
+    "10-01-2026",
+    "09-01-2026",
+    "Online",
+    "TXN4400000323"
+   ],
+   [
+    2,
+    1,
+    "2025-26 Even",
+    "Mess",
+    27500,
+    27500,
+    "10-01-2026",
+    "09-01-2026",
+    "Online",
+    "TXN4400001283"
+   ],
+   [
+    3,
+    1,
+    "2026-27 Odd",
+    "Hostel Rent",
+    64000,
+    64000,
+    "31-07-2026",
+    "17-07-2026",
+    "Online",
+    "TXN4400001319"
+   ],
+   [
+    4,
+    1,
+    "2026-27 Odd",
+    "Mess",
+    27500,
+    27500,
+    "31-07-2026",
+    "09-07-2026",
+    "Online",
+    "TXN4400002028"
+   ],
+   [
+    5,
+    2,
+    "2025-26 Even",
+    "Hostel Rent",
+    52000,
+    52000,
+    "10-01-2026",
+    "29-12-2025",
+    "Online",
+    "TXN4400002270"
+   ]
+  ]
+ },
+ "ANNOUNCEMENT": {
+  "columns": [
+   "ANNOUNCEMENT_ID",
+   "TITLE",
+   "BODY",
+   "CATEGORY",
+   "POSTED_BY",
+   "HOSTEL_ID",
+   "POSTED_DATE",
+   "EXPIRY_DATE",
+   "IS_PINNED"
+  ],
+  "rows": [
+   [
+    1,
+    "Water supply interruption on Saturday",
+    "Water supply will be shut off between 10 AM and 2 PM on Saturday for overhead tank cleaning. Please store water in advance.",
+    "Maintenance",
+    1,
+    null,
+    "14-08-2026 09:43",
+    "13-09-2026",
+    "N"
+   ],
+   [
+    2,
+    "Diwali leave applications",
+    "Students going home for Diwali must apply for leave through the portal at least three days before departure.",
+    "General",
+    1,
+    null,
+    "18-08-2026 13:25",
+    "17-09-2026",
+    "N"
+   ],
+   [
+    3,
+    "Mess feedback week",
+    "The mess committee is collecting suggestions for the next month's menu. Share your feedback with your floor representative.",
+    "Mess",
+    1,
+    null,
+    "05-08-2026 13:52",
+    "04-09-2026",
+    "N"
+   ],
+   [
+    4,
+    "Fire drill on Thursday",
+    "A mandatory fire evacuation drill will be conducted on Thursday at 6 PM. All residents must assemble at the main lawn.",
+    "Urgent",
+    1,
+    null,
+    "10-08-2026 13:19",
+    "09-09-2026",
+    "Y"
+   ],
+   [
+    5,
+    "Wi-Fi maintenance window",
+    "The hostel network will be upgraded on Sunday from 1 AM to 5 AM. Internet access may be intermittent.",
+    "Maintenance",
+    1,
+    null,
+    "09-08-2026 20:46",
+    "08-09-2026",
+    "N"
+   ]
+  ]
+ },
+ "MARKETPLACE_LISTING": {
+  "columns": [
+   "LISTING_ID",
+   "SELLER_ID",
+   "BUYER_ID",
+   "TITLE",
+   "DESCRIPTION",
+   "CATEGORY",
+   "PRICE",
+   "ITEM_CONDITION",
+   "STATUS",
+   "IMAGE_PATH",
+   "LISTED_DATE"
+  ],
+  "rows": [
+   [
+    1,
+    29,
+    251,
+    "Engineering Mathematics textbook (Grewal)",
+    "Engineering Mathematics textbook (Grewal) in usable condition. Contact me in my room for details.",
+    "Books",
+    420,
+    "New",
+    "Sold",
+    null,
+    "16-09-2026"
+   ],
+   [
+    2,
+    336,
+    null,
+    "Data Structures in C book",
+    "Data Structures in C book in usable condition. Contact me in my room for details.",
+    "Books",
+    200,
+    "New",
+    "Available",
+    null,
+    "29-07-2026"
+   ],
+   [
+    3,
+    109,
+    274,
+    "Casio fx-991ES scientific calculator",
+    "Casio fx-991ES scientific calculator in usable condition. Contact me in my room for details.",
+    "Electronics",
+    680,
+    "Good",
+    "Sold",
+    null,
+    "09-09-2026"
+   ],
+   [
+    4,
+    213,
+    42,
+    "Hero Sprint bicycle",
+    "Hero Sprint bicycle in usable condition. Contact me in my room for details.",
+    "Cycle",
+    3590,
+    "Good",
+    "Sold",
+    null,
+    "01-09-2026"
+   ],
+   [
+    5,
+    156,
+    null,
+    "Study table lamp (LED)",
+    "Study table lamp (LED) in usable condition. Contact me in my room for details.",
+    "Electronics",
+    410,
+    "Fair",
+    "Available",
+    null,
+    "05-08-2026"
+   ]
+  ]
+ },
+ "INVENTORY_ITEM": {
+  "columns": [
+   "ITEM_ID",
+   "HOSTEL_ID",
+   "ITEM_NAME",
+   "CATEGORY",
+   "QUANTITY_TOTAL",
+   "QUANTITY_DAMAGED",
+   "LAST_CHECKED"
+  ],
+  "rows": [
+   [
+    1,
+    1,
+    "Bed frame",
+    "Furniture",
+    92,
+    6,
+    "23-09-2026"
+   ],
+   [
+    2,
+    1,
+    "Mattress",
+    "Bedding",
+    92,
+    3,
+    "14-09-2026"
+   ],
+   [
+    3,
+    1,
+    "Study table",
+    "Furniture",
+    86,
+    1,
+    "30-09-2026"
+   ],
+   [
+    4,
+    1,
+    "Study chair",
+    "Furniture",
+    90,
+    5,
+    "19-09-2026"
+   ],
+   [
+    5,
+    1,
+    "Cupboard",
+    "Furniture",
+    89,
+    7,
+    "21-08-2026"
+   ]
+  ]
+ },
+ "LOST_FOUND_ITEM": {
+  "columns": [
+   "ITEM_ID",
+   "REPORTED_BY",
+   "CLAIMED_BY",
+   "REPORT_TYPE",
+   "ITEM_NAME",
+   "DESCRIPTION",
+   "LOCATION",
+   "REPORT_DATE",
+   "STATUS",
+   "IMAGE_PATH"
+  ],
+  "rows": [
+   [
+    1,
+    323,
+    null,
+    "Lost",
+    "Silver wrist watch",
+    "Silver wrist watch lost near the mess hall.",
+    "Gym",
+    "03-09-2026",
+    "Closed",
+    null
+   ],
+   [
+    2,
+    340,
+    null,
+    "Lost",
+    "Cycle lock key",
+    "Cycle lock key lost near the laundry area.",
+    "Laundry area",
+    "04-08-2026",
+    "Closed",
+    null
+   ],
+   [
+    3,
+    354,
+    342,
+    "Found",
+    "Umbrella",
+    "Umbrella found near the badminton court.",
+    "Mess hall",
+    "06-09-2026",
+    "Claimed",
+    null
+   ],
+   [
+    4,
+    53,
+    null,
+    "Lost",
+    "Black backpack",
+    "Black backpack lost near the main gate.",
+    "Main gate",
+    "23-08-2026",
+    "Open",
+    null
+   ],
+   [
+    5,
+    223,
+    267,
+    "Lost",
+    "Silver wrist watch",
+    "Silver wrist watch lost near the common washroom.",
+    "Gym",
+    "03-10-2026",
+    "Claimed",
+    null
+   ]
+  ]
+ },
+ "MESS_MENU": {
+  "columns": [
+   "MENU_ID",
+   "HOSTEL_ID",
+   "DAY_OF_WEEK",
+   "MEAL_TYPE",
+   "MENU_ITEMS"
+  ],
+  "rows": [
+   [
+    1,
+    1,
+    "MON",
+    "Breakfast",
+    "Poha, boiled eggs, banana, tea/coffee"
+   ],
+   [
+    2,
+    1,
+    "MON",
+    "Lunch",
+    "Jeera rice, rajma, mixed veg, chapati, salad"
+   ],
+   [
+    3,
+    1,
+    "MON",
+    "Snacks",
+    "Bread pakoda and coffee"
+   ],
+   [
+    4,
+    1,
+    "MON",
+    "Dinner",
+    "Fried rice, gobi manchurian, soup"
+   ],
+   [
+    5,
+    1,
+    "TUE",
+    "Breakfast",
+    "Aloo paratha, curd, pickle, tea/coffee"
+   ]
+  ]
+ }
+}

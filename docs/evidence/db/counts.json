@@ -1,0 +1,19 @@
+{
+ "captured": "08 Oct 2026, 00:23",
+ "counts": {
+  "HOSTEL": 6,
+  "ROOM": 180,
+  "STUDENT": 360,
+  "STAFF": 50,
+  "ROOM_ALLOCATION": 418,
+  "COMPLAINT": 460,
+  "LEAVE_REQUEST": 270,
+  "VISITOR_PASS": 270,
+  "FEE_PAYMENT": 1232,
+  "ANNOUNCEMENT": 24,
+  "MARKETPLACE_LISTING": 42,
+  "INVENTORY_ITEM": 66,
+  "LOST_FOUND_ITEM": 32,
+  "MESS_MENU": 168
+ }
+}

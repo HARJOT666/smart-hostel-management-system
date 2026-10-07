@@ -1,0 +1,450 @@
+{
+ "per_table": {
+  "ROOM": {
+   "PK": 1,
+   "FK": 1,
+   "UNIQUE": 1,
+   "CHECK": 5,
+   "NOT NULL": 5,
+   "DEFAULT": 2
+  },
+  "STAFF": {
+   "PK": 1,
+   "FK": 1,
+   "UNIQUE": 2,
+   "CHECK": 3,
+   "NOT NULL": 7,
+   "DEFAULT": 1
+  },
+  "INVENTORY_ITEM": {
+   "PK": 1,
+   "FK": 1,
+   "UNIQUE": 1,
+   "CHECK": 2,
+   "NOT NULL": 6,
+   "DEFAULT": 3
+  },
+  "MESS_MENU": {
+   "PK": 1,
+   "FK": 1,
+   "UNIQUE": 1,
+   "CHECK": 2,
+   "NOT NULL": 5,
+   "DEFAULT": 1
+  },
+  "ANNOUNCEMENT": {
+   "PK": 1,
+   "FK": 2,
+   "UNIQUE": 0,
+   "CHECK": 2,
+   "NOT NULL": 7,
+   "DEFAULT": 4
+  },
+  "ROOM_ALLOCATION": {
+   "PK": 1,
+   "FK": 3,
+   "UNIQUE": 0,
+   "CHECK": 3,
+   "NOT NULL": 7,
+   "DEFAULT": 3
+  },
+  "LOST_FOUND_ITEM": {
+   "PK": 1,
+   "FK": 2,
+   "UNIQUE": 0,
+   "CHECK": 2,
+   "NOT NULL": 6,
+   "DEFAULT": 3
+  },
+  "COMPLAINT": {
+   "PK": 1,
+   "FK": 2,
+   "UNIQUE": 0,
+   "CHECK": 4,
+   "NOT NULL": 7,
+   "DEFAULT": 4
+  },
+  "LEAVE_REQUEST": {
+   "PK": 1,
+   "FK": 2,
+   "UNIQUE": 0,
+   "CHECK": 2,
+   "NOT NULL": 7,
+   "DEFAULT": 3
+  },
+  "VISITOR_PASS": {
+   "PK": 1,
+   "FK": 2,
+   "UNIQUE": 1,
+   "CHECK": 2,
+   "NOT NULL": 6,
+   "DEFAULT": 2
+  },
+  "FEE_PAYMENT": {
+   "PK": 1,
+   "FK": 1,
+   "UNIQUE": 2,
+   "CHECK": 3,
+   "NOT NULL": 7,
+   "DEFAULT": 2
+  },
+  "MARKETPLACE_LISTING": {
+   "PK": 1,
+   "FK": 2,
+   "UNIQUE": 0,
+   "CHECK": 5,
+   "NOT NULL": 8,
+   "DEFAULT": 3
+  },
+  "HOSTEL": {
+   "PK": 1,
+   "FK": 0,
+   "UNIQUE": 1,
+   "CHECK": 2,
+   "NOT NULL": 4,
+   "DEFAULT": 1
+  },
+  "STUDENT": {
+   "PK": 1,
+   "FK": 0,
+   "UNIQUE": 2,
+   "CHECK": 3,
+   "NOT NULL": 8,
+   "DEFAULT": 1
+  }
+ },
+ "function_based_unique": [
+  [
+   "UX_ALLOC_ACTIVE_STUDENT",
+   "ROOM_ALLOCATION"
+  ],
+  [
+   "UX_ALLOC_ACTIVE_BED",
+   "ROOM_ALLOCATION"
+  ]
+ ],
+ "checks": [
+  [
+   "CK_ANNOUNCE_CATEGORY",
+   "ANNOUNCEMENT",
+   "category IN ('General', 'Maintenance', 'Mess', 'Event', 'Urgent')"
+  ],
+  [
+   "CK_ANNOUNCE_PINNED",
+   "ANNOUNCEMENT",
+   "is_pinned IN ('Y', 'N')"
+  ],
+  [
+   "CK_COMPLAINT_CATEGORY",
+   "COMPLAINT",
+   "category IN\n    ('Electrical', 'Plumbing', 'Carpentry', 'Housekeeping', 'Network', 'Other')"
+  ],
+  [
+   "CK_COMPLAINT_PRIORITY",
+   "COMPLAINT",
+   "priority IN ('Low', 'Medium', 'High')"
+  ],
+  [
+   "CK_COMPLAINT_RESOLVED",
+   "COMPLAINT",
+   "resolved_date >= created_date"
+  ],
+  [
+   "CK_COMPLAINT_STATUS",
+   "COMPLAINT",
+   "status IN ('Open', 'Assigned', 'In Progress', 'Resolved')"
+  ],
+  [
+   "CK_FEE_AMOUNTS",
+   "FEE_PAYMENT",
+   "amount_due > 0 AND amount_paid BETWEEN 0 AND amount_due"
+  ],
+  [
+   "CK_FEE_MODE",
+   "FEE_PAYMENT",
+   "payment_mode IN ('Online', 'Card', 'Cash', 'DD')"
+  ],
+  [
+   "CK_FEE_TYPE",
+   "FEE_PAYMENT",
+   "fee_type IN ('Hostel Rent', 'Mess', 'Caution Deposit')"
+  ],
+  [
+   "CK_HOSTEL_FLOORS",
+   "HOSTEL",
+   "total_floors > 0"
+  ],
+  [
+   "CK_HOSTEL_GENDER",
+   "HOSTEL",
+   "gender_type IN ('Male', 'Female')"
+  ],
+  [
+   "CK_INVENTORY_CAT",
+   "INVENTORY_ITEM",
+   "category IN ('Furniture', 'Electrical', 'Appliance', 'Bedding', 'Cleaning', 'Other')"
+  ],
+  [
+   "CK_INVENTORY_QTY",
+   "INVENTORY_ITEM",
+   "quantity_total >= 0 AND quantity_damaged BETWEEN 0 AND quantity_total"
+  ],
+  [
+   "CK_LEAVE_DATES",
+   "LEAVE_REQUEST",
+   "end_date >= start_date"
+  ],
+  [
+   "CK_LEAVE_STATUS",
+   "LEAVE_REQUEST",
+   "status IN ('Pending', 'Approved', 'Rejected')"
+  ],
+  [
+   "CK_LOSTFOUND_STATUS",
+   "LOST_FOUND_ITEM",
+   "status IN ('Open', 'Claimed', 'Closed')"
+  ],
+  [
+   "CK_LOSTFOUND_TYPE",
+   "LOST_FOUND_ITEM",
+   "report_type IN ('Lost', 'Found')"
+  ],
+  [
+   "CK_LISTING_BUYER",
+   "MARKETPLACE_LISTING",
+   "buyer_id IS NULL OR buyer_id <> seller_id"
+  ],
+  [
+   "CK_LISTING_CATEGORY",
+   "MARKETPLACE_LISTING",
+   "category IN ('Books', 'Electronics', 'Cycle', 'Furniture', 'Bedding', 'Other')"
+  ],
+  [
+   "CK_LISTING_CONDITION",
+   "MARKETPLACE_LISTING",
+   "item_condition IN ('New', 'Like New', 'Good', 'Fair')"
+  ],
+  [
+   "CK_LISTING_PRICE",
+   "MARKETPLACE_LISTING",
+   "price >= 0"
+  ],
+  [
+   "CK_LISTING_STATUS",
+   "MARKETPLACE_LISTING",
+   "status IN ('Available', 'Sold', 'Withdrawn')"
+  ],
+  [
+   "CK_MENU_DAY",
+   "MESS_MENU",
+   "day_of_week IN ('MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN')"
+  ],
+  [
+   "CK_MENU_MEAL",
+   "MESS_MENU",
+   "meal_type IN ('Breakfast', 'Lunch', 'Snacks', 'Dinner')"
+  ],
+  [
+   "CK_ROOM_CAPACITY",
+   "ROOM",
+   "capacity > 0"
+  ],
+  [
+   "CK_ROOM_FLOOR",
+   "ROOM",
+   "floor_no >= 0"
+  ],
+  [
+   "CK_ROOM_OCCUPIED",
+   "ROOM",
+   "occupied_count BETWEEN 0 AND capacity"
+  ],
+  [
+   "CK_ROOM_TYPE",
+   "ROOM",
+   "room_type IN ('Single', 'Double', 'Triple', 'Quad')"
+  ],
+  [
+   "CK_ROOM_TYPE_CAPACITY",
+   "ROOM",
+   "\n       (room_type = 'Single' AND capacity = 1)\n    OR (room_type = 'Double' AND capacity = 2)\n    OR (room_type = 'Triple' AND capacity = 3)\n    OR (room_type = 'Quad'   AND capacity = 4)"
+  ],
+  [
+   "CK_ALLOC_BED",
+   "ROOM_ALLOCATION",
+   "bed_number > 0"
+  ],
+  [
+   "CK_ALLOC_DATES",
+   "ROOM_ALLOCATION",
+   "vacate_date >= allocation_date"
+  ],
+  [
+   "CK_ALLOC_STATUS",
+   "ROOM_ALLOCATION",
+   "status IN ('Active', 'Vacated', 'Cancelled')"
+  ],
+  [
+   "CK_STAFF_ROLE",
+   "STAFF",
+   "role IN ('Admin', 'Warden', 'Maintenance')"
+  ],
+  [
+   "CK_STAFF_ROLE_SPEC",
+   "STAFF",
+   "\n       (role = 'Maintenance' AND specialization IS NOT NULL)\n    OR (role <> 'Maintenance' AND specialization IS NULL)"
+  ],
+  [
+   "CK_STAFF_SPEC",
+   "STAFF",
+   "specialization IN\n    ('Electrical', 'Plumbing', 'Carpentry', 'Housekeeping', 'Network')"
+  ],
+  [
+   "CK_STUDENT_CGPA",
+   "STUDENT",
+   "cgpa BETWEEN 0 AND 10"
+  ],
+  [
+   "CK_STUDENT_GENDER",
+   "STUDENT",
+   "gender IN ('Male', 'Female')"
+  ],
+  [
+   "CK_STUDENT_YEAR",
+   "STUDENT",
+   "year BETWEEN 1 AND 4"
+  ],
+  [
+   "CK_VISITOR_STATUS",
+   "VISITOR_PASS",
+   "status IN ('Pending', 'Approved', 'Rejected', 'Completed')"
+  ],
+  [
+   "CK_VISITOR_TIMES",
+   "VISITOR_PASS",
+   "exit_time > entry_time"
+  ]
+ ],
+ "foreign_keys": [
+  [
+   "FK_ANNOUNCE_HOSTEL",
+   "ANNOUNCEMENT",
+   "HOSTEL_ID",
+   "HOSTEL"
+  ],
+  [
+   "FK_ANNOUNCE_STAFF",
+   "ANNOUNCEMENT",
+   "POSTED_BY",
+   "STAFF"
+  ],
+  [
+   "FK_COMPLAINT_STUDENT",
+   "COMPLAINT",
+   "STUDENT_ID",
+   "STUDENT"
+  ],
+  [
+   "FK_COMPLAINT_STAFF",
+   "COMPLAINT",
+   "ASSIGNED_TO",
+   "STAFF"
+  ],
+  [
+   "FK_FEE_STUDENT",
+   "FEE_PAYMENT",
+   "STUDENT_ID",
+   "STUDENT"
+  ],
+  [
+   "FK_INVENTORY_HOSTEL",
+   "INVENTORY_ITEM",
+   "HOSTEL_ID",
+   "HOSTEL"
+  ],
+  [
+   "FK_LEAVE_STAFF",
+   "LEAVE_REQUEST",
+   "APPROVED_BY",
+   "STAFF"
+  ],
+  [
+   "FK_LEAVE_STUDENT",
+   "LEAVE_REQUEST",
+   "STUDENT_ID",
+   "STUDENT"
+  ],
+  [
+   "FK_LOSTFOUND_CLAIM",
+   "LOST_FOUND_ITEM",
+   "CLAIMED_BY",
+   "STUDENT"
+  ],
+  [
+   "FK_LOSTFOUND_REP",
+   "LOST_FOUND_ITEM",
+   "REPORTED_BY",
+   "STUDENT"
+  ],
+  [
+   "FK_LISTING_SELLER",
+   "MARKETPLACE_LISTING",
+   "SELLER_ID",
+   "STUDENT"
+  ],
+  [
+   "FK_LISTING_BUYER",
+   "MARKETPLACE_LISTING",
+   "BUYER_ID",
+   "STUDENT"
+  ],
+  [
+   "FK_MENU_HOSTEL",
+   "MESS_MENU",
+   "HOSTEL_ID",
+   "HOSTEL"
+  ],
+  [
+   "FK_ROOM_HOSTEL",
+   "ROOM",
+   "HOSTEL_ID",
+   "HOSTEL"
+  ],
+  [
+   "FK_ALLOC_STAFF",
+   "ROOM_ALLOCATION",
+   "ALLOCATED_BY",
+   "STAFF"
+  ],
+  [
+   "FK_ALLOC_ROOM",
+   "ROOM_ALLOCATION",
+   "ROOM_ID",
+   "ROOM"
+  ],
+  [
+   "FK_ALLOC_STUDENT",
+   "ROOM_ALLOCATION",
+   "STUDENT_ID",
+   "STUDENT"
+  ],
+  [
+   "FK_STAFF_HOSTEL",
+   "STAFF",
+   "HOSTEL_ID",
+   "HOSTEL"
+  ],
+  [
+   "FK_VISITOR_STAFF",
+   "VISITOR_PASS",
+   "APPROVED_BY",
+   "STAFF"
+  ],
+  [
+   "FK_VISITOR_STUDENT",
+   "VISITOR_PASS",
+   "STUDENT_ID",
+   "STUDENT"
+  ]
+ ]
+}

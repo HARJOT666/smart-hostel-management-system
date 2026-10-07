@@ -1,0 +1,35 @@
+$ docker compose ps
+NAME          IMAGE                        STATUS                    PORTS
+shms-oracle   gvenzl/oracle-free:23-slim   Up 41 minutes (healthy)   0.0.0.0:1521->1521/tcp, [::]:1521->1521/tcp
+shms-redis    redis:7.4-alpine             Up 59 minutes (healthy)   0.0.0.0:6379->6379/tcp, [::]:6379->6379/tcp
+
+$ docker volume ls --filter name=shms
+DRIVER    VOLUME NAME
+local     shms-oracle-data
+
+$ docker inspect -f '{{.HostConfig.RestartPolicy.Name}}' shms-oracle shms-redis
+/shms-oracle unless-stopped
+/shms-redis unless-stopped
+
+$ curl http://localhost:8080/actuator/health
+{
+  "status": "UP",
+  "components": {
+    "db": {
+      "status": "UP",
+      "details": {
+        "database": "Oracle",
+        "validationQuery": "isValid()"
+      }
+    },
+    "ping": {
+      "status": "UP"
+    },
+    "redis": {
+      "status": "UP",
+      "details": {
+        "version": "7.4.11"
+      }
+    }
+  }
+}

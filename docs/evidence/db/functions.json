@@ -1,0 +1,133 @@
+{
+ "occupancy": {
+  "columns": [
+   "HOSTEL_NAME",
+   "OCCUPANCY_PCT"
+  ],
+  "rows": [
+   [
+    "Aravali Block",
+    67.86
+   ],
+   [
+    "Nilgiri Block",
+    79.45
+   ],
+   [
+    "Shivalik Block",
+    67.9
+   ],
+   [
+    "Vindhya Block",
+    76.32
+   ],
+   [
+    "Ganga Block",
+    65.48
+   ],
+   [
+    "Kaveri Block",
+    74.29
+   ]
+  ]
+ },
+ "beds": {
+  "columns": [
+   "ROOM_NUMBER",
+   "CAPACITY",
+   "OCCUPIED_COUNT",
+   "AVAILABLE_BEDS",
+   "NEXT_FREE_BED"
+  ],
+  "rows": [
+   [
+    "AR-101",
+    2,
+    2,
+    0,
+    null
+   ],
+   [
+    "AR-102",
+    3,
+    3,
+    0,
+    null
+   ],
+   [
+    "AR-103",
+    3,
+    3,
+    0,
+    null
+   ],
+   [
+    "AR-104",
+    4,
+    4,
+    0,
+    null
+   ],
+   [
+    "AR-105",
+    2,
+    2,
+    0,
+    null
+   ],
+   [
+    "AR-106",
+    2,
+    2,
+    0,
+    null
+   ]
+  ]
+ },
+ "workload": {
+  "columns": [
+   "STAFF_ID",
+   "NAME",
+   "SPECIALIZATION",
+   "OPEN_JOBS"
+  ],
+  "rows": [
+   [
+    3,
+    "Prakash Naidu",
+    "Electrical",
+    1
+   ],
+   [
+    6,
+    "Naveen Chopra",
+    "Plumbing",
+    1
+   ],
+   [
+    7,
+    "Ishaan Bose",
+    "Carpentry",
+    1
+   ],
+   [
+    8,
+    "Manav Subramanian",
+    "Housekeeping",
+    1
+   ],
+   [
+    9,
+    "Ayaan Sharma",
+    "Network",
+    2
+   ],
+   [
+    10,
+    "Atharv Naidu",
+    "Plumbing",
+    2
+   ]
+  ]
+ }
+}
